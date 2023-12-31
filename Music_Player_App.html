@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Player</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            justify-content: center;
+            align-items: center;
+            display: flex;
+            height: 100vh;
+            background: rgb(133, 124, 124);
+        }
+
+        .main {
+            background-color: aliceblue;
+            padding: 1em;
+            padding-bottom: 1.1em;
+            border-radius: 1em;
+            margin: 1em;
+            border: 2px solid rgb(138, 29, 247);
+            transition: .3s all;
+        }
+
+        .main:hover {
+            background-color: antiquewhite;
+            box-shadow: 0 0 20px rgb(254, 9, 9);
+        }
+
+        .loader {
+            display: flex;
+            flex-direction: row;
+            height: 4em;
+            padding: 0 1em;
+            transform: rotate(180deg);
+            justify-content: right;
+            border-radius: 10px;
+            transition: .4s ease-in-out;
+        }
+
+        .current_playing {
+            display: flex;
+            margin: 1em;
+        }
+
+        .loader:hover {
+            cursor: pointer;
+            background-color: lightblue;
+        }
+
+        .spotify {
+            width: 50px;
+            height: 50px;
+            margin-right: 0.6em;
+        }
+
+        .spotify img {
+            height: 100%;
+            width: 100%;
+        }
+
+        .current_playing {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .heading {
+            color: black;
+            font-size: 1.1em;
+            font-weight: bold;
+            align-self: center;
+        }
+
+        .loading {
+            display: flex;
+            margin-top: 1em;
+            margin-left: .3em;
+        }
+
+        .load:nth-child(1) {
+            animation-delay: .2s;
+        }
+
+        .load:nth-child(2) {
+            animation-delay: 4s;
+        }
+
+        .load:nth-child(3) {
+            animation-delay: .6s;
+        }
+
+        .play {
+            position: relative;
+            left: 0.35em;
+            height: 1.6em;
+            width: 1.6em;
+            clip-path: polygon(50% 50%, 100% 50%, 75% 6.6%);
+            background-color: black;
+            transform: rotate(-90deg);
+            align-self: center;
+            margin-top: 0.7em;
+            justify-self: center;
+        }
+
+        .album_cover {
+            position: relative;
+            margin-right: 1em;
+            height: 40px;
+            width: 40px;
+            background-color: white;
+            align-self: center;
+            border-radius: 5px;
+        }
+
+        .song {
+            position: relative;
+            transform: rotate(180deg);
+            margin-right: 1em;
+            color: black;
+            align-self: center;
+        }
+
+        .artist {
+            font-size: .6em;
+        }
+
+        .load {
+            width: 2px;
+            height: 33px;
+            background-color: limegreen;
+            animation: 1s move6 infinite;
+            border-radius: 5px;
+            margin: 0.1em;
+        }
+
+        @keyframes move6 {
+            0% {
+                height: 0.2em;
+            }
+
+            25% {
+                height: 0.7em;
+            }
+
+            50% {
+                height: 1.5em;
+            }
+
+            100% {
+                height: 0.2em;
+            }
+        }
+
+
+        .audio-controls {
+            display: flex;
+            align-items: center;
+            margin-top: 1em;
+        }
+
+        .audio-controls button {
+            margin: 0 0.5em;
+            padding: 0.5em;
+            font-size: 1em;
+            cursor: pointer;
+        }
+
+        /* Progress bar styles */
+        .progress-container {
+            width: 100%;
+            position: relative;
+            height: 15px;
+            margin-top: 1em;
+        }
+
+        .progress-bar {
+            width: 0;
+            height: 100%;
+            background-color: limegreen;
+            position: absolute;
+        }
+
+        /* Responsive design */
+        @media (max-width: 600px) {
+            .main {
+                width: 90%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="main">
+        <div class="current_playing">
+            <div class="spotify">
+                <img src="Spotify_icon.svg.png" alt="">
+            </div>
+            <p class="heading">
+                currently playing
+            </p>
+        </div>
+        <div class="loader">
+            <div class="song">
+                <p class="name">Dunki</p>
+                <p class="artist">Pritam, Arijit Singh, Swanand Kirkire, IP Singh</p>
+            </div>
+            <div class="album_cover"> </div>
+            <div class="loading">
+                <div class="load"></div>
+                <div class="load"></div>
+                <div class="load"></div>
+                <div class="load"></div>
+            </div>
+        </div>
+
+        <div class="loader">
+            <div class="song">
+                <p class="name">Meri Ho Ja</p>
+                <p class="artist">Sachet Tandon, Parampara Tandon, Kumaar, Sachet-Parampara</p>
+            </div>
+            <div class="album_cover"> </div>
+            <div class="loading">
+                <div class="play"></div>
+            </div>
+        </div>
+
+        <div class="loader">
+            <div class="song">
+                <p class="name">Ishqa</p>
+                <p class="artist">Varun Jain</p>
+            </div>
+            <div class="album_cover"> </div>
+            <div class="loading">
+                <div class="play"></div>
+            </div>
+        </div>
+    </div>
+    <!-- Added audio controls -->
+    <div class="audio-controls">
+        <button id="prevBtn">Previous</button>
+        <button id="shuffleBtn">Shuffle</button>
+        <button id="playPauseBtn">Play</button>
+        <button id="nextBtn">Next</button>
+        <button id="repeatBtn">Repeat</button>
+        <input type="range" id="volumeRange" min="0" max="1" step="0.1" value="1">
+    </div>
+
+    <!-- Added progress bar -->
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <script>
+        // Placeholder data
+        const musicData = [
+            { name: "Meri Ho Ja", artist: "Sachet Tandon, Parampara Tandon, Kumaar, Sachet-Parampara", src: "meri ho ja.mp3" },
+            { name: "Lutt Putt Gaya", artist: "Pritam, Arijit Singh, Swanand Kirkire, IP Singh", src: "Lutt Putt Gaya.mp3" },
+            { name: "Ishqa", artist: "Varun Jain", src: "ishqa.mp3" }
+        ];
+
+        let currentTrackIndex = 0;
+        let isShuffle = false;
+        let isRepeat = false;
+        const audio = new Audio();
+
+        function loadTrack(index) {
+            const currentTrack = musicData[index];
+            document.querySelector('.name').textContent = currentTrack.name;
+            document.querySelector('.artist').textContent = currentTrack.artist;
+            audio.src = currentTrack.src;
+            audio.load();
+        }
+
+        function playPause() {
+            if (audio.paused) {
+                audio.play();
+                document.getElementById('playPauseBtn').textContent = 'Pause';
+            } else {
+                audio.pause();
+                document.getElementById('playPauseBtn').textContent = 'Play';
+            }
+        }
+
+        function nextTrack() {
+            if (isShuffle) {
+                currentTrackIndex = getRandomIndex();
+            } else {
+                currentTrackIndex = (currentTrackIndex + 1) % musicData.length;
+            }
+            loadTrack(currentTrackIndex);
+            playPause();
+        }
+
+        function prevTrack() {
+            currentTrackIndex = (currentTrackIndex - 1 + musicData.length) % musicData.length;
+            loadTrack(currentTrackIndex);
+            playPause();
+        }
+
+        function updateVolume() {
+            audio.volume = document.getElementById('volumeRange').value;
+        }
+
+        // Update progress bar
+        function updateProgressBar() {
+            const progressBar = document.getElementById('progressBar');
+            const progress = (audio.currentTime / audio.duration) * 100;
+            progressBar.style.width = `${progress}%`;
+        }
+
+        // Event listeners
+        audio.addEventListener('ended', function () {
+            if (isRepeat) {
+                audio.currentTime = 0;
+                audio.play();
+            } else {
+                nextTrack();
+            }
+        });
+
+        document.getElementById('playPauseBtn').addEventListener('click', playPause);
+        document.getElementById('nextBtn').addEventListener('click', nextTrack);
+        document.getElementById('prevBtn').addEventListener('click', prevTrack);
+        document.getElementById('volumeRange').addEventListener('input', updateVolume);
+
+        // Shuffle button click event
+        document.getElementById('shuffleBtn').addEventListener('click', function () {
+            isShuffle = !isShuffle;
+            document.getElementById('shuffleBtn').textContent = isShuffle ? 'Shuffle On' : 'Shuffle';
+        });
+
+        // Repeat button click event
+        document.getElementById('repeatBtn').addEventListener('click', function () {
+            isRepeat = !isRepeat;
+            document.getElementById('repeatBtn').textContent = isRepeat ? 'Repeat On' : 'Repeat';
+        });
+
+        // Update progress bar on time update
+        audio.addEventListener('timeupdate', updateProgressBar);
+
+        // Load the first track
+        loadTrack(currentTrackIndex);
+
+        // Function to get a random index for shuffle
+        function getRandomIndex() {
+            let randomIndex = currentTrackIndex;
+            while (randomIndex === currentTrackIndex) {
+                randomIndex = Math.floor(Math.random() * musicData.length);
+            }
+            return randomIndex;
+        }
+    </script>
+</body>
+
+</html>
